@@ -1,0 +1,15 @@
+#!/bin/bash
+#a funny toy
+
+i=0
+b=""
+
+while $i -le 100
+  printf "Progress[%-25s]%d%\r" $b $i
+  #Format output characteristics of printf
+  #\r Return to the header and coverage characteristic
+  
+  let i=$i+4
+  b=#$b
+
+

@@ -1,0 +1,72 @@
+#!/bin/bash
+
+read -p "Please input MAC[0x00 0xFD 0x45 0xFF 0x15 0xB0 ]:" MAC0_STD
+echo $MAC0_STD>MAC_STD.txt
+echo "$MAC0_STD" |awk '{print ($1$2$3$4$5$6)}' >>MAC_STD.txt
+mac0=`echo "$MAC0_STD" |awk '{print ($1$2$3$4$5$6)}' |awk -F"0x" '{print ($2$3$4$5$6$7)}'`
+echo $mac0>>MAC_STD.txt
+
+echo "In MAC_STD.txt MAC:"
+cat MAC_STD.txt
+
+hex_add_1(){
+local mac_curr=$1
+local mac_curr_rev=`echo $mac_curr | rev`
+local flag=1
+local result=""
+
+for i in {0..11}
+do
+        i=${mac_curr_rev:$i:1}
+        if [ $flag -eq 1 ]
+        then
+                case $i in
+                [0-8])
+                        let i++
+                ;;
+                9)
+                        i=A
+                ;;
+                a|A)
+                        i=B
+                ;;
+                b|B)
+                        i=C
+                ;;
+                c|C)
+                        i=D
+                ;
+                d|D)
+                        i=E
+                ;;
+                e|E)
+                        i=F
+                ;;
+                f|F)
+                        i=0
+                        flag=1
+                ;;
+                esac
+                [[ $i != 0 ]]&&flag=0
+        fi
+
+        result=$i$result
+done
+echo $result
+
+unset mac_curr
+unset mac_curr_rev
+unset i
+unset flag
+unset result
+}
+
+
+for i in {0..4}
+do
+        mac[0]=$mac0
+        temp=${mac[$i]}
+        let j=$i+1
+        mac[$j]=`eval "hex_add_1 $temp"`
+done
+echo ${mac[*]}

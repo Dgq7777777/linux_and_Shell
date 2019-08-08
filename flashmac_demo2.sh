@@ -5,7 +5,7 @@
 read -p "Please input a MAC[0x00 0xFD 0x45 0xFF 0x15 0xB0]:" MAC_STD
 echo "$MAC_STD">MAC_STD.txt
 echo "$MAC_STD" |awk  '{print ($1$2$3$4$5$6)}' >>MAC_STD.txt
-mac0=`echo "$MAC_STD" |awk '{print ($1$2$3$4$5$6)}'|awk -F"0x" '{print ($2$3$4$5$6$7)}'` 
+mac0=`echo "$MAC_STD" |awk '{print ($1$2$3$4$5$6)}'|awk -F"0x" '{print ($2$3$4$5$6$7)}' |awk '{print toupper($0)}'` 
 echo "$mac0">>MAC_STD.txt
 echo -e "\033[33mMAC_STD:\033[0m"
 echo $MAC_STD

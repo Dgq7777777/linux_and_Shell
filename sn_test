@@ -1,0 +1,24 @@
+# !/bin/bash
+source mytool.sh
+
+sn_test(){
+
+local result
+local sn
+local sn_std
+
+sn=`dmidecode -t 1 |awk '/Serial Number/{for(i=3;i<=NF;i++){printf "%s",$i};}'`
+sn="$sn"
+echo $sn
+sn_std=`cat ./nece/std_file|awk  '/^sn/{print $2}'`
+echo $sn_std
+
+[[ $sn == $sn_std ]]&&result=pass
+[[ $sn != $sn_std ]]&&result=fail
+
+echo $result
+
+log_up7 8 SN $result
+unset result sn
+
+}
